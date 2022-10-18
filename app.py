@@ -52,7 +52,8 @@ def index():
 #   activa este return para las pruebas
     #return render_template("pruebas.html",formulario=datosCalendario,year=2022)
 # fin de prueba
-    return render_template("index.html")
+    return render_template("index.html",formulario=datosCalendario,year=year,turno=turno,colores=colores,nombre=nombreUsuario)
+
 # ruta de pruebas
 
 
