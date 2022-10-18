@@ -1,6 +1,6 @@
-Flask
+flask
 gunicorn
 wtforms
-sqlite3==3.39.2
+SQLite3
 
 
