@@ -16,35 +16,27 @@ year=date.today().year
 
 colores={"A":"bg-success", "B":"bg-primary", "C":"bg-danger" ,"D":"bg-warning" ,"E":"bg-warning bg-opacity-50" }
 coloresdias={"N": "bg-secondary","T":"bg-warning" ,"M":"bg-info" } #Mañana tarde noche
-nombreUsuarioActivo="Invitado"
+nombreUsuario="Invitado"
 calendario.secret_key = b'eadbfd1f49d6d770ff5cad200d212c74c8f17389df36f7179210af1f9f481741'
 
 #Creamos el index de la app, utilizando templates, en html desde la carpteta templates
 @calendario.route("/", methods=["POST","GET"])
 def index():
-    if 'message' in session:
-        print("hay mensajes", session)
-    print(session)
 
-    turno=usuario.turno
-    nombreUsuario=usuario.nombre
+
+
+
 
     datosCalendario=formularios.Datos(request.form)
 
     if request.method=='POST': #el llamar a validate, parece estar obsoleto, ya lo hace en el formulario
         print("Soy index y llega por post")
     else:
-        print("llega por otra cosa",year,turno,nombreUsuarioActivo)
+        print("llega por otra cosa",year,turno)
 
         
    
-    if 'username' in session:
-        nombreUsuario=session["username"]
-        turno=usuario.turno
-    else:
-        nombreUsuario="Invitado"
-        usuario.nombre="Invitado"
-        turno=usuario.turno
+
 #para la prueba
 
     
@@ -54,42 +46,21 @@ def index():
 # fin de prueba
     return render_template("index.html",formulario=datosCalendario,year=year,turno=turno,colores=colores,nombre=nombreUsuario)
 
-@calendario.route("/anualllamada",methods=["POST","GET"])
-def anualllamada(usuario):
-
-    if 'username' in session:
-        nombreUsuario=session['username']
-        turno=session['turn']
-        #if usuario.turno!=turno:
-            #print("puede qqqqqqqqqqqqqqqqqqqqqqqqe lleeeeeeeeeeeeeeeegue")
-            #pass # no se muy bien que hacer aqui, seria para que no cambie el color
-    else:
-        nombreUsuario="Invitado"
-        turno=""
-    mes=1  # FIXME  ESTO VA A SER PARA PROBAR UN MES EN CONCRETO
-    calendario=calendarioReal.calendarioReal(int(year),turno)
-
-    return(render_template("calendarioYear.html",cd=coloresdias,colores=colores,year=year,turno=turno,nombre=nombreUsuario,calendario=calendario))
 
 
 @calendario.route("/anual",methods=["POST","GET"])
 def anual():    
 
-    if session: #todo esto es viejo, cambia por username
-        nombreUsuario=session['username']
 
-        turno=session['turn']
-    else:
-        nombreUsuario="Invitado"
-        turno=""
+    nombreUsuario="Invitado"
     year=request.form['year']
     turno=request.form['turno']
 
     mes=1  # FIXME  ESTO VA A SER PARA PROBAR UN MES EN CONCRETO
     print(year,turno)
     calendario=calendarioReal.calendarioReal(int(year),turno)
-
-    return(render_template("calendarioYear.html",cd=coloresdias,turno=turno,nombre=nombreUsuario,colores=colores,mes=mes,year=year,calendario=calendario))
+    return(render_template("calendarioYear.html",cd=coloresdias,colores=colores,year=year,turno=turno,nombre=nombreUsuario,calendario=calendario))
+    
 
 
 

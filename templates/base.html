@@ -35,11 +35,11 @@
                     </li>   -->
 
                   {% endif %}
-                  {% if 'username' in session %}
+<!--                   {% if 'username' in session %}
                     <li class="nav-item align-items-lg-end">
                       <a class="nav-link" href="{{ url_for('logout') }}">Cerrar sesion</a>
                     </li>       
-                  {% endif %} 
+                  {% endif %}  -->
 
                 </ul>
               </div>
@@ -49,14 +49,14 @@
 <!-- Barra de naveegación de Usuario  -->
 
 
-        {% if 'username' in session %}
+<!--         {% if 'username' in session %}
           {% set colorturno=colores[session['turn']] %}
         {% else %}
           {% set colorturno="navbar-dark bg-dark" %}
         
-        {% endif %}
+        {% endif %} -->
         
-        <nav class="navbar navbar-expand-lg {{ colorturno }} d-flex">
+<!--         <nav class="navbar navbar-expand-lg {{ colorturno }} d-flex">
           <div class="container-fluid "> 
          
             <div class="collapse navbar-collapse " id="navbarNavDropdown">
@@ -66,16 +66,13 @@
                 </li>
                 <li class="nav-item col-7">
                   <h2 class=" p-md-1 text-white" href="#">{{ nombre }}</h2>
-                </li>
-                {% if 'username' in session %}
-                <!--   <li class="nav-item col-6">
-                     <h2 class=" p-md-3 text-white" href="#">Año: {{ year }}</h2> 
+                </li> -->
+<!--                 {% if 'username' in session %}
 
-                  </li>   -->  
                   <li class="nav-item row col-10">
                     <h2 class=" p-md-1 text-white" href="#">Turno: {{ session["turn"] }}</h2>
                   </li>                    
-                {% endif %}
+                {% endif %} -->
                           
 
 <!--                 {% if session %}
