@@ -10,6 +10,13 @@ import formularios
 
 
 calendario=Flask(__name__)
+usuario=Usuarios.Usuario()
+turno=""
+year=date.today().year
+
+colores={"A":"bg-success", "B":"bg-primary", "C":"bg-danger" ,"D":"bg-warning" ,"E":"bg-warning bg-opacity-50" }
+coloresdias={"N": "bg-secondary","T":"bg-warning" ,"M":"bg-info" } #Mañana tarde noche
+nombreUsuarioActivo="Invitado"
 
 #Creamos el index de la app, utilizando templates, en html desde la carpteta templates
 @calendario.route("/", methods=["POST","GET"])
