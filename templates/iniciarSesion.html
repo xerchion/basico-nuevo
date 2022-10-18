@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+
+
+  {% from 'macro.html' import render_field %}
+
+  <h1 class="text-center"">  </h1>
+    <div class="container ">
+
+      <h1 class="text-center">Inicio de sesión</h1> 
+        <h1 class="text-center"">  </h1>
+      <div class="row"> 
+        <div class="col">
+          
+        </div>
+        <div class="col-5">
+          <form class="border-2 border-dark" name="sendMessage" id="datosForm" method="POST">
+                {{ render_field(form.nombre,class="form-control") }}
+                {{ render_field(form.contra_usuario,class="form-control") }}
+                <button type="submit" class="btn btn-primary">Acceder</button>
+          </form>
+          <div class="container text-center"> <!-- Mensajes flasheados de error de datos -->
+            {% with messages=get_flashed_messages()  %}
+          
+              {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                 {{ message }} 
+                </div>
+                  
+                  
+                {% endfor %}
+                
+              {% endif %}
+              
+            {% endwith %}
+          </div>
+        </div>
+        <div class="col">
+          
+        </div>
+      </div>
+           
+                 
+                    
+ 
+
+  {% endblock %}
