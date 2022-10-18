@@ -149,7 +149,7 @@ def alta():
 @calendario.route('/login', methods=['GET', 'POST'])
 def login():
   
-    import formularios
+
     datos=formularios.Acceso(request.form)
     if request.method=='POST' and datos.validate(): #el llamar a validate, parece estar obsoleto, ya lo hace en el formulario
         usuario.nombre=datos.nombre.data
@@ -172,7 +172,10 @@ def login():
     return render_template("iniciarSesion.html",form=datos,nombre=nombreUsuarioActivo,colores=colores)
         
 
-
+@calendario.route('/error')
+def error():
+  
+    return render_template("error.html")
 
 
 
