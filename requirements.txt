@@ -1,6 +1,6 @@
 Flask
 gunicorn
 wtforms
-sqlite3
+sqlite3==3.39.2
 
 
