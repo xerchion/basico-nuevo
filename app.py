@@ -1,5 +1,5 @@
 
-from flask import Flask,render_template,session,request
+from flask import Flask,render_template,session,request,redirect,url_for,flash
 
 from datetime import date
 import calendarioReal
@@ -54,7 +54,141 @@ def index():
 # fin de prueba
     return render_template("index.html",formulario=datosCalendario,year=year,turno=turno,colores=colores,nombre=nombreUsuario)
 
-# ruta de pruebas
+@calendario.route("/anualllamada",methods=["POST","GET"])
+def anualllamada(usuario):
+
+    if 'username' in session:
+        nombreUsuario=session['username']
+        turno=session['turn']
+        #if usuario.turno!=turno:
+            #print("puede qqqqqqqqqqqqqqqqqqqqqqqqe lleeeeeeeeeeeeeeeegue")
+            #pass # no se muy bien que hacer aqui, seria para que no cambie el color
+    else:
+        nombreUsuario="Invitado"
+        turno=""
+    mes=1  # FIXME  ESTO VA A SER PARA PROBAR UN MES EN CONCRETO
+    calendario=calendarioReal.calendarioReal(int(year),turno)
+
+    return(render_template("calendarioYear.html",cd=coloresdias,colores=colores,year=year,turno=turno,nombre=nombreUsuario,calendario=calendario))
+
+
+@calendario.route("/anual",methods=["POST","GET"])
+def anual():    
+
+    if session: #todo esto es viejo, cambia por username
+        nombreUsuario=session['username']
+
+        turno=session['turn']
+    else:
+        nombreUsuario="Invitado"
+        turno=""
+    year=request.form['year']
+    turno=request.form['turno']
+
+    mes=1  # FIXME  ESTO VA A SER PARA PROBAR UN MES EN CONCRETO
+    print(year,turno)
+    calendario=calendarioReal.calendarioReal(int(year),turno)
+
+    return(render_template("calendarioYear.html",cd=coloresdias,turno=turno,nombre=nombreUsuario,colores=colores,mes=mes,year=year,calendario=calendario))
+
+
+
+@calendario.route("/alta",methods=["POST","GET"])
+def alta():
+    datos=formularios.AltaUsuario(request.form)
+    renderizaAlta=render_template("altaUsuario.html",form=datos,nombre="Invitado")
+    if request.method=='POST': #el llamar a validate, parece estar obsoleto, ya lo hace en el formulario
+        print("llega por post, de momento sin datos")
+        #validamos
+        usuario.nombre=datos.nombre.data
+        usuario.contraseña=datos.contra_usuario.data
+        usuario.turno=datos.turno.data
+        usuario.correo=datos.correo.data
+        usuario.colores=""
+        if gestionBD.comprobarUsuario(usuario):
+            flash("Este usuario y contraseña ya están registrados")
+           
+            #calendario=calendarioReal.calendarioReal(int(year),usuario.turno)                
+            #renderizaAlta=render_template("calendarioYear.html",colores=colores,cd=coloresdias,mes=mes,year=year,nombre=session['username'],turno=session['turn'],calendario=calendario)
+
+        else:
+            print("no esta, lo doy de alta")
+            
+            #TODO aqui tiene que ir el loggin o la llamada al login........ 
+            session['username']=usuario.nombre
+            session['turn']=usuario.turno
+                #Guardamos
+            if gestionBD.altaUsuario(usuario):
+                print("dado bien de alta")
+                    #vamos a pagina de confirmación
+                #flash("Usuario dado de alta satisfactoriamente, ahora por favor inicie sesion")
+
+                #renderizaAlta=render_template("usuarioExito.html",usuario=usuario.nombre)
+                calendario=calendarioReal.calendarioReal(int(year),usuario.turno)
+                renderizaAlta=render_template("calendarioYear.html",cd=coloresdias,colores=colores,mes=mes,year=year,turno=usuario.turno,nombre=usuario.nombre,calendario=calendario)
+    else:            
+            
+            print(usuario.turno,usuario.nombre,"aquiiiiiiiiiiiiiiiiiiiii")
+            redirect(request.url)
+            #calendario=calendarioReal.calendarioReal(int(year),usuario.turno)
+
+            #renderizaAlta=render_template("calendarioYear.html",cd=coloresdias,colores=colores,mes=mes,year=year,nombre=nombreUsuario,turno=usuario.turno,calendario=calendario)
+
+            
+         
+    return renderizaAlta
+
+# Las siguientes lineas crean otra página de prueba de calendarioHTML, puedes borrarlo
+# con estas lineas activo el debug para no tener que cerrar y abrir el servidor en cada cambio
+#que hiciera, de esta manera no hay que hacer ctrl-c para salir del servidor.
+# para que funcione no puede ser con "flask run" en la consola, debe ser con "pyton app.py"
+
+
+#iniciar sesion
+
+@calendario.route('/login', methods=['GET', 'POST'])
+def login():
+  
+    import formularios
+    datos=formularios.Acceso(request.form)
+    if request.method=='POST' and datos.validate(): #el llamar a validate, parece estar obsoleto, ya lo hace en el formulario
+        usuario.nombre=datos.nombre.data
+        usuario.contraseña=datos.contra_usuario.data
+        if gestionBD.comprobarUsuario(usuario):
+            session['username'] = usuario.nombre
+            session['turn']=usuario.turno
+            
+
+                        #mensaje de introducido bien
+            anualllamada(usuario)        
+            return anualllamada(usuario)
+
+        else:
+            
+            flash("El usuario no existe o la contraseña es incorrecta, por favor inténtalo de nuevo")
+         
+    #else:
+        #logout()
+    return render_template("iniciarSesion.html",form=datos,nombre=nombreUsuarioActivo,colores=colores)
+        
+
+
+
+
+
+@calendario.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    if 'username' in session:
+        session.pop('username', None)
+        
+        session.pop('turn', None)
+
+    #print(session['turn'])
+    #del session['username']
+    usuario.nombre="Invitado"
+    usuario.turno=""
+    return redirect(url_for('index'))
 
 
 if __name__=="__main__":
