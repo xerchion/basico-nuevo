@@ -54,6 +54,7 @@ def anual():
 
     nombreUsuario="Invitado"
     year=request.form['year']
+    print(year)
     turno=request.form['turno']
 
     mes=1  # FIXME  ESTO VA A SER PARA PROBAR UN MES EN CONCRETO

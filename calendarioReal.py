@@ -1,6 +1,6 @@
 
 def calendarioReal(year,turno):
-    import calendar as cl
+    import calendar
     from datetime import datetime
     #Para poner el calendario en español utilizamos el utf de español, asi los dias y meses salen en Español
     import locale
@@ -12,7 +12,7 @@ def calendarioReal(year,turno):
 #    year=2023      # FIXME  ESTE AÑO ES EL QUE SE DEBE PASAR COMO PARAMETRO A ELECCION DEL USUSARIO
   #  turno="c"       # FIXME  ESTE AÑO ES EL QUE SE DEBE PASAR COMO PARAMETRO A ELECCION DEL USUSARIO
 
-    calendarioMes=cl.month(year,1)  # el tercer argumento son los espacios, es importante dejarlo sin poner
+    calendarioMes=calendar.month(year,1)  # el tercer argumento son los espacios, es importante dejarlo sin poner
     # pk sino habria que modificar las funciones de extracción de las cabeceras y los dias
 
 
@@ -83,7 +83,7 @@ def calendarioReal(year,turno):
     calendarioReal=Calendario()
     calendarioReal.year=year     #FIXME ESTE VALOR ES TEMPORAL, CAMBIARLO POR EL SUYO (VARIABLE)
     for i in range(1,13):
-        calendarioMes=cl.month(year,i)
+        calendarioMes=calendar.month(year,i)
         calendarioMes=limpiar_year(calendarioMes)
         calendarioReal.meses.append(rellenarMes(calendarioMes,i))
 
